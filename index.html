@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 
 <html lang="es">
@@ -14,47 +16,231 @@
 
 *{box-sizing:border-box}
 
-body{margin:0;background:#f7eee5;color:#653d35;font-family:Georgia,serif}
+body{
 
-#app{width:min(100%,760px);margin:auto;padding:12px}
+  margin:0;
+
+  background:#f7eee5;
+
+  color:#653d35;
+
+  font-family:Georgia,serif;
+
+}
+
+#app{
+
+  width:min(100%,760px);
+
+  margin:auto;
+
+  padding:12px;
+
+}
 
 .view{display:none}
 
 .view.active{display:block}
 
-.art{display:block;width:100%;height:auto;object-fit:contain;border-radius:14px}
+.art{
+
+  display:block;
+
+  width:100%;
+
+  height:auto;
+
+  object-fit:contain;
+
+  border-radius:14px;
+
+}
 
 #closedView,#openView{cursor:pointer}
 
-#calendarView{text-align:center;padding:4px 0 18px}
+.calendar-wrap{
 
-#calendarArt{width:100%;height:auto;display:block;border-radius:14px}
+  position:relative;
 
-.calendar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 4px}
+  width:100%;
 
-.day{min-height:62px;border:2px solid #b77b57;border-radius:10px;background:#fff0d9;color:#813d2d;font: bold 23px Georgia;box-shadow:0 3px 5px #0002}
+  line-height:0;
 
-.day:disabled{opacity:.42;background:#ddd0c4;color:#806f64}
+}
 
-.day:not(:disabled){cursor:pointer}
+#calendarArt{
 
-button{cursor:pointer}
+  display:block;
 
-.back{border:0;border-radius:20px;background:#9d4b35;color:white;padding:12px 22px;font-size:15px;margin:12px}
+  width:100%;
 
-.modal{display:none;position:fixed;inset:0;background:#24150edb;z-index:5;align-items:center;justify-content:center;padding:18px}
+  height:auto;
+
+  border-radius:14px;
+
+}
+
+/* Zonas invisibles encima de los 24 dibujos */
+
+.hotspots{
+
+  position:absolute;
+
+  left:8%;
+
+  right:8%;
+
+  top:2%;
+
+  bottom:5%;
+
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  grid-template-rows:repeat(6,1fr);
+
+  column-gap:2%;
+
+  row-gap:1.5%;
+
+}
+
+.hotspot{
+
+  border:0;
+
+  padding:0;
+
+  margin:0;
+
+  background:transparent;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  min-width:0;
+
+  min-height:0;
+
+}
+
+.hotspot:disabled{
+
+  cursor:not-allowed;
+
+}
+
+.hotspot:not(:disabled):active{
+
+  background:#ffffff30;
+
+  outline:2px solid #ffffff70;
+
+}
+
+.back{
+
+  display:block;
+
+  margin:16px auto;
+
+  border:0;
+
+  border-radius:22px;
+
+  background:#9d4b35;
+
+  color:white;
+
+  padding:12px 24px;
+
+  font-size:15px;
+
+}
+
+.modal{
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:5;
+
+  background:#24150edb;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:18px;
+
+}
 
 .modal.show{display:flex}
 
-.modal-card{background:#fff4e5;border:3px solid #bd8b59;border-radius:18px;padding:25px 20px;text-align:center;width:min(100%,430px);box-shadow:0 8px 30px #0005}
+.modal-card{
 
-.modal-card h2{color:#9c432f;margin-top:0}
+  background:#fff4e5;
 
-.modal-card p{font-size:18px;line-height:1.5}
+  border:3px solid #bd8b59;
 
-.valid{font-size:13px!important;color:#8b6b55;margin-top:22px}
+  border-radius:18px;
 
-.close{background:#9d4b35;color:white;border:0;border-radius:20px;padding:10px 25px;font-size:15px}
+  padding:25px 20px;
+
+  text-align:center;
+
+  width:min(100%,430px);
+
+  box-shadow:0 8px 30px #0005;
+
+}
+
+.modal-card h2{
+
+  color:#9c432f;
+
+  margin-top:0;
+
+}
+
+.modal-card p{
+
+  font-size:18px;
+
+  line-height:1.5;
+
+}
+
+.valid{
+
+  font-size:13px!important;
+
+  color:#8b6b55;
+
+  margin-top:22px;
+
+}
+
+.close{
+
+  background:#9d4b35;
+
+  color:white;
+
+  border:0;
+
+  border-radius:20px;
+
+  padding:10px 25px;
+
+  font-size:15px;
+
+}
 
 </style>
 
@@ -64,43 +250,69 @@ button{cursor:pointer}
 
 <div id="app">
 
-<section id="closedView" class="view active" onclick="showView('openView')">
+<section id="closedView" class="view active"
 
-<img class="art" src="BD81608E-A032-415E-BCD4-685DCC8AA317.png" alt="Tienda navideña cerrada">
+         onclick="showView('openView')">
+
+  <img class="art"
+
+       src="BD81608E-A032-415E-BCD4-685DCC8AA317.png"
+
+       alt="Tienda navideña cerrada">
 
 </section>
 
-<section id="openView" class="view" onclick="showView('calendarView')">
+<section id="openView" class="view"
 
-<img class="art" src="3B81A37C-A0EF-4BF2-B79D-326B49DA0179.png" alt="Tienda navideña abierta">
+         onclick="showView('calendarView')">
+
+  <img class="art"
+
+       src="3B81A37C-A0EF-4BF2-B79D-326B49DA0179.png"
+
+       alt="Tienda navideña abierta">
 
 </section>
 
 <section id="calendarView" class="view">
 
-<img id="calendarArt" src="BA6DBF78-1A79-4C8D-A5F3-5DD434879647.png" alt="Calendario de Adviento">
+  <div class="calendar-wrap">
 
-<div class="calendar-grid" id="days"></div>
+    <img id="calendarArt"
 
-<button class="back" onclick="showView('openView')">Volver a la tienda</button>
+         src="0BF2B8C7-9C39-4348-8F6A-F63BF7E3CD06.png"
+
+         alt="Calendario de Adviento">
+
+    <div class="hotspots" id="hotspots"></div>
+
+  </div>
+
+  <button class="back" onclick="showView('openView')">
+
+    Volver a la tienda
+
+  </button>
 
 </section>
 
 </div>
 
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+<div class="modal" id="modal"
 
-<div class="modal-card">
+     onclick="if(event.target===this)closeModal()">
 
-<h2 id="giftTitle"></h2>
+  <div class="modal-card">
 
-<p id="giftText"></p>
+    <h2 id="giftTitle"></h2>
 
-<p class="valid">Canjeable hasta el 31/12/27</p>
+    <p id="giftText"></p>
 
-<button class="close" onclick="closeModal()">Cerrar</button>
+    <p class="valid">Canjeable hasta el 31/12/27</p>
 
-</div>
+    <button class="close" onclick="closeModal()">Cerrar</button>
+
+  </div>
 
 </div>
 
@@ -160,63 +372,81 @@ const gifts = [
 
 function showView(id){
 
- document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.querySelectorAll(".view").forEach(v=>{
 
- document.getElementById(id).classList.add("active");
+    v.classList.remove("active");
 
- window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  window.scrollTo({top:0,behavior:"smooth"});
 
 }
 
 function isUnlocked(day){
 
- if(new URLSearchParams(location.search).has("test"))return true;
+  if(new URLSearchParams(location.search).has("test")){
 
- const now=new Date();
+    return true;
 
- const spain=new Date(now.toLocaleString("en-US",{timeZone:"Europe/Madrid"}));
+  }
 
- const unlock=new Date(2026,11,day);
+  const now=new Date();
 
- return spain>=unlock;
+  const madrid=new Date(
+
+    now.toLocaleString("en-US",{timeZone:"Europe/Madrid"})
+
+  );
+
+  const unlock=new Date(2026,11,day);
+
+  return madrid>=unlock;
 
 }
 
 function openGift(day){
 
- if(!isUnlocked(day))return;
+  if(!isUnlocked(day))return;
 
- document.getElementById("giftTitle").textContent=gifts[day-1][0];
+  document.getElementById("giftTitle").textContent=
 
- document.getElementById("giftText").textContent=gifts[day-1][1];
+    gifts[day-1][0];
 
- document.getElementById("modal").classList.add("show");
+  document.getElementById("giftText").textContent=
+
+    gifts[day-1][1];
+
+  document.getElementById("modal").classList.add("show");
 
 }
 
 function closeModal(){
 
- document.getElementById("modal").classList.remove("show");
+  document.getElementById("modal").classList.remove("show");
 
 }
 
-const days=document.getElementById("days");
+const hotspots=document.getElementById("hotspots");
 
 gifts.forEach((gift,index)=>{
 
- const day=index+1;
+  const day=index+1;
 
- const button=document.createElement("button");
+  const button=document.createElement("button");
 
- button.className="day";
+  button.className="hotspot";
 
- button.textContent=day;
+  button.type="button";
 
- button.disabled=!isUnlocked(day);
+  button.setAttribute("aria-label","Día "+day);
 
- button.addEventListener("click",()=>openGift(day));
+  button.disabled=!isUnlocked(day);
 
- days.appendChild(button);
+  button.addEventListener("click",()=>openGift(day));
+
+  hotspots.appendChild(button);
 
 });
 
