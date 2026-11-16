@@ -173,7 +173,26 @@ footer {
   font-size: 12px;
 
 }
+#portada {
+  cursor: pointer;
+  transform-origin: left center;
+}
 
+#portada.abriendo {
+  animation: abrirPuerta 0.8s ease-in-out;
+}
+
+@keyframes abrirPuerta {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(-75deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+}
 </style>
 
 </head>
@@ -181,11 +200,7 @@ footer {
 <body>
 <div style="max-width:600px; margin:20px auto;">
 
-  <img src="BD81608E-A032-415E-BCD4-685DCC8AA317.png"
-
-       alt="Portada de Navidad"
-
-       style="width:100%; height:auto; display:block; border-radius:15px;">
+<img id="portada" src="BD81608E-A032-415E-BCD4-685DCC8AA317.png" alt="Portada de Navidad" style="width:100%; height:auto; display:block; border-radius:15px;">
 
 </div>
 <h1>Calendario de Adviento</h1>
