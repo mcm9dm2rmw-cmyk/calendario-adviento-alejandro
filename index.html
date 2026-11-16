@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calendario de Adviento</title>
+
+<style>
+
+* {
+
+  box-sizing: border-box;
+
+}
+
+body {
+
+  margin: 0;
+
+  padding: 25px 16px;
+
+  min-height: 100vh;
+
+  background: #f5eee5;
+
+  color: #493b36;
+
+  font-family: Georgia, serif;
+
+  text-align: center;
+
+}
+
+h1 {
+
+  font-size: 30px;
+
+  margin: 25px 0 10px;
+
+}
+
+.subtitle {
+
+  font-size: 15px;
+
+  margin-bottom: 30px;
+
+}
+
+.calendar {
+
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 12px;
+
+  max-width: 600px;
+
+  margin: 25px auto;
+
+}
+
+.day {
+
+  min-height: 90px;
+
+  border: 1px solid #d9c6b7;
+
+  border-radius: 12px;
+
+  background: #fffaf4;
+
+  color: #783c42;
+
+  font-family: Georgia, serif;
+
+  font-size: 27px;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 7px #00000010;
+
+}
+
+.day:disabled {
+
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+}
+
+.day span {
+
+  display: block;
+
+  font-size: 11px;
+
+  margin-top: 7px;
+
+}
+
+.modal {
+
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  background: #00000080;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 20px;
+
+  z-index: 10;
+
+}
+
+.modal-content {
+
+  background: #fffaf4;
+
+  border-radius: 18px;
+
+  padding: 30px 22px;
+
+  max-width: 400px;
+
+  width: 100%;
+
+  position: relative;
+
+}
+
+.modal-content h2 {
+
+  color: #783c42;
+
+}
+
+.close {
+
+  position: absolute;
+
+  right: 15px;
+
+  top: 10px;
+
+  border: none;
+
+  background: none;
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+}
+
+footer {
+
+  margin: 35px 0 15px;
+
+  font-size: 12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Calendario de Adviento</h1>
+
+<p class="subtitle">24 días, 24 sorpresas especiales ❤️</p>
+
+<div class="calendar" id="calendar"></div>
+
+<div class="modal" id="modal">
+
+  <div class="modal-content">
+
+    <button class="close" onclick="closeModal()">×</button>
+
+    <h2 id="modalTitle"></h2>
+
+    <p id="modalText"></p>
+
+  </div>
+
+</div>
+
+<footer>Una pequeña sorpresa cada día ❤️</footer>
+
+<script>
+
+const testMode = new URLSearchParams(location.search).has("test");
+
+const surprises = Array.from({length: 24}, (_, i) => ({
+
+  title: `Día ${i + 1}`,
+
+  text: "Aquí colocaremos la sorpresa de este día ❤️"
+
+}));
+
+const calendar = document.getElementById("calendar");
+
+surprises.forEach((surprise, index) => {
+
+  const number = index + 1;
+
+  const button = document.createElement("button");
+
+  const unlocked = testMode ||
+
+    new Date() >= new Date(2026, 11, number);
+
+  button.className = "day";
+
+  button.disabled = !unlocked;
+
+  button.innerHTML = `${number}<span>${unlocked ? "Abrir" : "Cerrado 🔒"}</span>`;
+
+  button.addEventListener("click", () => {
+
+    document.getElementById("modalTitle").textContent =
+
+      surprise.title;
+
+    document.getElementById("modalText").textContent =
+
+      surprise.text;
+
+    document.getElementById("modal").style.display = "flex";
+
+  });
+
+  calendar.appendChild(button);
+
+});
+
+function closeModal() {
+
+  document.getElementById("modal").style.display = "none";
+
+}
+
+</script>
+
+</body>
+
+</html>
