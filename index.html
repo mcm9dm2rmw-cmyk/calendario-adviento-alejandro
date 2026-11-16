@@ -200,7 +200,19 @@ footer {
 <body>
 <div style="max-width:600px; margin:20px auto;">
 
-<img id="portada" src="8D7854A3-C159-462E-91B0-99152C202178.png" alt="Portada de Navidad" onclick="this.src='BD81608E-A032-415E-BCD4-685DCC8AA317.png'; this.onclick=null;" style="width:100%; height:auto; display:block; border-radius:15px; cursor:pointer;">
+<img id="portada"
+
+src="8D7854A3-C159-462E-91B0-99152C202178.png"
+
+data-cerrada="8D7854A3-C159-462E-91B0-99152C202178.png"
+
+data-abierta="BD81608E-A032-415E-BCD4-685DCC8AA317.png"
+
+data-estado="cerrada"
+
+onclick="this.dataset.estado=this.dataset.estado==='cerrada'?'abierta':'cerrada';this.src=this.dataset.estado==='abierta'?this.dataset.abierta:this.dataset.cerrada;"
+
+style="width:100%;height:auto;display:block;border-radius:15px;cursor:pointer;">
 </div>
 <h1>Calendario de Adviento</h1>
 
