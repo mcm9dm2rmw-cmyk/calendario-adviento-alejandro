@@ -210,15 +210,14 @@ data-abierta="BD81608E-A032-415E-BCD4-685DCC8AA317.png"
 
 data-estado="cerrada"
 
-onclick="this.dataset.estado=this.dataset.estado==='cerrada'?'abierta':'cerrada';this.src=this.dataset.estado==='abierta'?this.dataset.abierta:this.dataset.cerrada;"
-
+onclick="this.dataset.estado=this.dataset.estado==='cerrada'?'abierta':'cerrada';document.getElementById('calendar').style.display=this.dataset.estado==='abierta'?'':'none';
 style="width:100%;height:auto;display:block;border-radius:15px;cursor:pointer;">
 </div>
 <h1>Calendario de Adviento</h1>
 
 
 
-<div class="calendar" id="calendar"></div>
+<div class="calendar" id="calendar" style="display:none;"></div>
 
 <div class="modal" id="modal">
 
