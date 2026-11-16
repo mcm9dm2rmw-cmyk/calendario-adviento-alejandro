@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 
 <html lang="es">
@@ -28,35 +26,35 @@ body{margin:0;background:#f7eee5;color:#653d35;font-family:Georgia,serif}
 
 #closedView,#openView{cursor:pointer}
 
-.hint{text-align:center;font:14px system-ui,sans-serif;color:#78574e}
+#calendarView{text-align:center;padding:4px 0 18px}
 
-#calendarView{padding:4px 0 18px}
+#calendarArt{width:100%;height:auto;display:block;border-radius:14px}
 
-#calendarArt{width:100%;max-height:78vh;object-fit:contain}
+.calendar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 4px}
 
-#days{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px auto;max-width:560px}
+.day{min-height:62px;border:2px solid #b77b57;border-radius:10px;background:#fff0d9;color:#813d2d;font: bold 23px Georgia;box-shadow:0 3px 5px #0002}
 
-.day{min-height:58px;border:2px solid #b84b4b;border-radius:13px;background:#fff8ef;color:#a33b3d;font:bold 23px Georgia,serif;cursor:pointer}
+.day:disabled{opacity:.42;background:#ddd0c4;color:#806f64}
 
-.day:disabled{background:#e8ddd4;color:#9b8980;border-color:#c9b8ad;cursor:not-allowed}
+.day:not(:disabled){cursor:pointer}
 
-#back{display:block;margin:12px auto;padding:12px 22px;border:0;border-radius:24px;background:#a83f40;color:white;font-size:15px}
+button{cursor:pointer}
 
-#modal{display:none;position:fixed;inset:0;background:#241612bb;z-index:10;align-items:center;justify-content:center;padding:18px}
+.back{border:0;border-radius:20px;background:#9d4b35;color:white;padding:12px 22px;font-size:15px;margin:12px}
 
-#modal.show{display:flex}
+.modal{display:none;position:fixed;inset:0;background:#24150edb;z-index:5;align-items:center;justify-content:center;padding:18px}
 
-#card{width:min(100%,420px);background:#fff7ed;border:3px solid #c96c61;border-radius:20px;padding:24px 20px;text-align:center}
+.modal.show{display:flex}
 
-#card h2{margin:0 0 14px;color:#a83f40;font-size:25px}
+.modal-card{background:#fff4e5;border:3px solid #bd8b59;border-radius:18px;padding:25px 20px;text-align:center;width:min(100%,430px);box-shadow:0 8px 30px #0005}
 
-#card p{font-size:18px;line-height:1.5}
+.modal-card h2{color:#9c432f;margin-top:0}
 
-#expiry{font:14px system-ui,sans-serif;color:#8d6b5e;margin-top:20px}
+.modal-card p{font-size:18px;line-height:1.5}
 
-#closeCard{margin-top:8px;border:0;border-radius:22px;background:#a83f40;color:white;padding:10px 24px;font-size:15px}
+.valid{font-size:13px!important;color:#8b6b55;margin-top:22px}
 
-@media(max-width:420px){#app{padding:8px}#days{gap:6px}.day{min-height:52px;font-size:21px}}
+.close{background:#9d4b35;color:white;border:0;border-radius:20px;padding:10px 25px;font-size:15px}
 
 </style>
 
@@ -64,46 +62,166 @@ body{margin:0;background:#f7eee5;color:#653d35;font-family:Georgia,serif}
 
 <body>
 
-<main id="app">
+<div id="app">
 
-<section id="closedView" class="view active" onclick="showOpen()">
+<section id="closedView" class="view active" onclick="showView('openView')">
 
-<img class="art" src="8D7854A3-A032-415E-BCD4-685DCC8AA317.png" alt="Tienda navideña cerrada">
+<img class="art" src="BD81608E-A032-415E-BCD4-685DCC8AA317.png" alt="Tienda navideña cerrada">
 
 </section>
 
-<section id="openView" class="view" onclick="showCalendar()">
+<section id="openView" class="view" onclick="showView('calendarView')">
 
-<img class="art" src="BD81608E-A032-415E-BCD4-685DCC8AA317.png" alt="Tienda navideña abierta">
-
-<p class="hint">Toca para entrar</p>
+<img class="art" src="3B81A37C-A0EF-4BF2-B79D-326B49DA0179.png" alt="Tienda navideña abierta">
 
 </section>
 
 <section id="calendarView" class="view">
 
-<img id="calendarArt" class="art" src="BA6DBF78-1A79-4C8D-A5F3-5DD434879647.png" alt="Calendario de Adviento">
+<img id="calendarArt" src="BA6DBF78-1A79-4C8D-A5F3-5DD434879647.png" alt="Calendario de Adviento">
 
-<div id="days"></div>
+<div class="calendar-grid" id="days"></div>
 
-<button id="back" onclick="showClosed()">Volver a la tienda</button>
+<button class="back" onclick="showView('openView')">Volver a la tienda</button>
 
 </section>
 
-</main>
+</div>
 
-<div id="modal" onclick="closeOnBackdrop(event)">
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
 
-<div id="card">
+<div class="modal-card">
 
-<h2 id="title"></h2>
+<h2 id="giftTitle"></h2>
 
-<p id="description"></p>
+<p id="giftText"></p>
 
-<p id="expiry">Canjeable hasta el 31/12/27</p>
+<p class="valid">Canjeable hasta el 31/12/27</p>
 
-<button id="closeCard" onclick="closeGift()">Cerrar</button>
+<button class="close" onclick="closeModal()">Cerrar</button>
 
 </div>
 
 </div>
+
+<script>
+
+const gifts = [
+
+["Tarde de spa y skincare en casa","Hoy toca cuidarnos: mascarillas, skincare, mimos y una tarde para desconectar juntos."],
+
+["Tarde de manta y película de Marvel","¿Y si hoy no hacemos demasiado? Manta, sofá y una peli de Marvel de las que tú quieras."],
+
+["Cocinar un postre juntos","Elegimos una receta dulce, nos ponemos manos a la obra y luego toca probar el resultado."],
+
+["Merienda de churros con chocolate","Hoy te invito yo, tú solo tienes que venir con hambre."],
+
+["Noche de misterio: investigar y resolver un crimen juntos","Una víctima, varios sospechosos y un montón de pistas. Esta noche nos convertimos en detectives. A ver si conseguimos descubrir al culpable antes de acusar a medio mundo."],
+
+["Ir a patinar sobre hielo","Una tarde de patinaje sobre hielo. Prometo intentar no acabar más tiempo en el suelo que patinando."],
+
+["Tarde de juegos de mesa","Una tarde de juegos, piques y competición. Que gane el mejor… aunque ya veremos si aceptamos la derrota."],
+
+["Masaje de espalda","Vale por un masaje de espalda en condiciones. Esta noche tus únicas preocupaciones serán elegir la postura y no quedarte dormido."],
+
+["Tarde de fotos para reírse y pasárselo bien","Salimos a hacer fotos juntos, sin vergüenza y con permiso para hacer el ridículo."],
+
+["Día del SÍ A TODO","Tienes 24 horas para elegir lo que quieras hacer. Yo no puedo quejarme, protestar ni poner pegas. Hoy mandas tú."],
+
+["Noche de cubatas y Guatoca en casa","Esta noche montamos nuestra propia fiesta en casa: cubatas, Guatoca, música y a ver quién acaba haciendo más el ridículo."],
+
+["Cita de los colores","Salimos a pasear. Cada uno elige un color y tiene que fotografiar todo lo que encuentre de ese color."],
+
+["Cita low cost","Una cita sin gastar apenas dinero. El plan es nuestro y lo importante es pasarlo bien."],
+
+["Ir al cine","Tú eliges la película y yo invito. Esta vez te toca escoger a ti, aunque espero que tengas buen gusto."],
+
+["Ver tiendas de Navidad","Una tarde para pasear, ver las decoraciones y empaparnos del ambiente navideño."],
+
+["Cita de supermercado","Cada uno elige algunas cosas en el supermercado y después decidimos qué cena podemos preparar con nuestra compra."],
+
+["Tarde de figuras de plastilina","Nos ponemos creativos y hacemos figuras de plastilina. El jurado decidirá quién tiene más talento."],
+
+["Ruta de senderismo","Nos vamos de ruta, disfrutamos del paisaje y hacemos una pequeña escapada juntos."],
+
+["Aprender a hacer sushi juntos","Preparamos sushi desde cero y después nos lo comemos juntos con una sangría."],
+
+["Comida en Yakitoro","Tenemos una comida pendiente en Yakitoro. Esta vez invito yo."],
+
+["Recrear nuestra primera cita","Imagina que hoy nos conocemos por primera vez. Volvemos a tener nuestra primera cita, pero esta vez sin saber cómo acaba la historia."],
+
+["Noche de videojuegos","Torneo de videojuegos entre los dos. Habrá competición, piques y un ganador que tendrá que presumir."],
+
+["Construir algo juntos","Elegimos entre LEGO, una maqueta o un puzzle y construimos algo entre los dos."],
+
+["Dormir en un sitio diferente","Una noche fuera de casa, en un sitio especial y diferente. Esta vez cambiamos nuestra cama por una experiencia de esas que apetece recordar."]
+
+];
+
+function showView(id){
+
+ document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+
+ document.getElementById(id).classList.add("active");
+
+ window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+function isUnlocked(day){
+
+ if(new URLSearchParams(location.search).has("test"))return true;
+
+ const now=new Date();
+
+ const spain=new Date(now.toLocaleString("en-US",{timeZone:"Europe/Madrid"}));
+
+ const unlock=new Date(2026,11,day);
+
+ return spain>=unlock;
+
+}
+
+function openGift(day){
+
+ if(!isUnlocked(day))return;
+
+ document.getElementById("giftTitle").textContent=gifts[day-1][0];
+
+ document.getElementById("giftText").textContent=gifts[day-1][1];
+
+ document.getElementById("modal").classList.add("show");
+
+}
+
+function closeModal(){
+
+ document.getElementById("modal").classList.remove("show");
+
+}
+
+const days=document.getElementById("days");
+
+gifts.forEach((gift,index)=>{
+
+ const day=index+1;
+
+ const button=document.createElement("button");
+
+ button.className="day";
+
+ button.textContent=day;
+
+ button.disabled=!isUnlocked(day);
+
+ button.addEventListener("click",()=>openGift(day));
+
+ days.appendChild(button);
+
+});
+
+</script>
+
+</body>
+
+</html>
